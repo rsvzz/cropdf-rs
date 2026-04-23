@@ -1,0 +1,62 @@
+use crate::model::{ParamArgs, DrawCrExt};
+use cairo::Context;
+use std::cell::RefCell;
+
+#[derive(Clone)]
+pub struct LabelCr{
+    text: String,
+    width: f64,
+    height: f64,
+    setting: Option<ParamArgs>,
+}
+
+impl LabelCr{
+    pub fn new(text: String, _width: f64, _height: f64) -> Self{
+        LabelCr{
+            text: text,
+            width: _width,
+            height: _height,
+            setting: None,
+        }
+    }
+
+    pub fn set_point(&mut self, _setting: Option<ParamArgs>){
+        self.setting =  _setting;
+    }
+
+    pub fn point(&self) -> Option<ParamArgs>{
+        self.setting.clone()
+    }
+
+    pub fn set_text(&mut self, ntext: String){
+        self.text =  ntext.to_string();
+    }
+}
+
+impl DrawCrExt for LabelCr{
+    fn draw(&self, context: RefCell<Option<Context>>){
+        if let Some(cr) = context.borrow().as_ref() {
+
+            if let Some(param) = &self.setting{
+                  cr.select_font_face(
+                param.font_family.as_str(),
+                param.font_type,
+                param.font_weight,
+            );
+            cr.set_font_size(param.font_size);
+
+            if let Ok(extents) = cr.text_extents(&self.text) {
+                //width max change font_size
+                if extents.width() > self.width {
+                    cr.set_font_size(param.font_size - 3.0); //change 3pt font_size
+                }
+            }
+            //[x, y]
+            cr.move_to(param.point.x, param.point.y);
+            //show text
+            let _ = cr.show_text(&self.text);
+            } 
+          
+        }
+    }
+}
