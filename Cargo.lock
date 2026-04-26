@@ -42,7 +42,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cropdf-rs"
+name = "cropdf"
 version = "0.1.0"
 dependencies = [
  "cairo-rs",

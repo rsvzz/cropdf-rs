@@ -1,8 +1,8 @@
 use cairo::PdfSurface;
 use std::cell::RefCell;
 
-use crate::model::{DrawCrExt};
-use cairo::{Context,};
+use crate::model::DrawCrExt;
+use cairo::Context;
 
 ///width and height move_to [x, y]
 #[derive(Clone)]
@@ -65,8 +65,7 @@ impl CreatePDF {
         }
     }
 
-    pub fn add(&self, obj: &dyn DrawCrExt){
-        obj.draw(self.context.clone())
+    pub fn add(&self, obj: &dyn DrawCrExt) {
+        obj.draw(self.context.clone());
     }
 }
-
