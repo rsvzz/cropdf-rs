@@ -1,6 +1,6 @@
 use cairo::{FontSlant, FontWeight};
 
-use crate::model::{LabelCr, ParamArgs, PointXY};
+use crate::model::{LabelCr, ParamArgs, PointXY, FontSlantCr, FontWeightCr};
 use std::{ffi::CStr, os::raw::c_char};
 
 #[repr(C)]
@@ -23,8 +23,8 @@ pub extern "C" fn label_cr_set_param_args(
     ptr: *mut LabelCROpaque,
     font: *const c_char,
     size: f64,
-    slant: i32,
-    weight: i32,
+    slant: FontSlantCr,
+    weight: FontWeightCr,
     x: f64,
     y: f64,
 ) {
@@ -37,15 +37,15 @@ pub extern "C" fn label_cr_set_param_args(
             let font_family = family.to_str().unwrap().to_string(); //String rust
 
             let font_slant = match slant {
-                0 => FontSlant::Italic,
-                1 => FontSlant::Normal,
-                2 => FontSlant::Oblique,
+                FontSlantCr::SLANT_NORMAL => FontSlant::Normal,
+                FontSlantCr::SLANT_STATIC => FontSlant::Italic,
+                FontSlantCr::SLANT_OBLIQUE => FontSlant::Oblique,
                 _ => FontSlant::Normal,
             };
 
             let font_weight = match weight {
-                0 => FontWeight::Bold,
-                1 => FontWeight::Normal,
+                FontWeightCr::WEIGHT_NORMAL => FontWeight::Normal,
+                FontWeightCr::WEIGHT_BOLD => FontWeight::Bold,
                 _ => FontWeight::Normal,
             };
 
