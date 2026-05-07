@@ -1,4 +1,4 @@
-use crate::model::{ParamArgs, DrawCrExt};
+use crate::model::{DrawCrExt, ParamArgs, ParamArgsExt};
 use cairo::Context;
 use std::cell::RefCell;
 
@@ -20,17 +20,24 @@ impl LabelCr{
         }
     }
 
-    pub fn set_point(&mut self, _setting: Option<ParamArgs>){
-        self.setting =  _setting;
-    }
-
-    pub fn point(&self) -> Option<ParamArgs>{
-        self.setting.clone()
-    }
-
     pub fn set_text(&mut self, ntext: String){
         self.text =  ntext.to_string();
     }
+}
+
+impl ParamArgsExt for LabelCr {
+    type Output = Option<ParamArgs>;
+    type InSetting = Option<ParamArgs>;
+    
+    fn set_point(&mut self, _setting: Self::InSetting) {
+        self.setting = _setting;
+    }
+    
+    fn point(&self) -> Self::Output {
+        self.setting.clone()
+    }
+
+    
 }
 
 impl DrawCrExt for LabelCr{

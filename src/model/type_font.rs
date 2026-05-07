@@ -1,12 +1,20 @@
 #[repr(C)]
 pub enum FontSlantCr{
-    SLANT_NORMAL,
-    SLANT_STATIC,
-    SLANT_OBLIQUE,
+    Normal,
+    Static,
+    Oblique,
 }
 
 #[repr(C)]
 pub enum FontWeightCr{
-    WEIGHT_NORMAL,
-    WEIGHT_BOLD,
+    Normal,
+    Bold,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+///H or V orientation
+pub enum AxisCr {
+    Horizontal,
+    Vertical
 }

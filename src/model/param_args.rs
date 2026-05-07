@@ -1,5 +1,5 @@
 use cairo::{FontSlant, FontWeight};
-use crate::model::PointXY;
+use crate::model::{PointXY};
 
 ///Position and type font shows text
 #[derive(Clone)]
@@ -27,4 +27,17 @@ impl ParamArgs {
             point: point,
         }
     }
+
+    pub fn new_point(
+        point: PointXY,
+    ) -> Self {
+        ParamArgs {
+            font_family: "".to_string(),
+            font_size: 0.0,
+            font_weight: FontWeight::Normal,
+            font_type: FontSlant::Normal,
+            point: point,
+        }
+    }
 }
+

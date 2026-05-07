@@ -1,4 +1,4 @@
-use crate::{view::CreatePDF, view::LabelCROpaque};
+use crate::{view::CreatePDF, view::LabelCROpaque, view::LineCROpaque};
 use std::{ffi::CString, os::raw::c_char};
 
 /// Tipo opaco para C
@@ -88,6 +88,20 @@ pub extern "C" fn create_pdf_add(ptr: *mut CreatePDFOpaque, label_ptr: *mut Labe
 
    let pdf = unsafe { & (*ptr).inner };
    let label = unsafe {&(*label_ptr).inner};
+
+   pdf.add(&*label);
+   
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn create_pdf_add_line(ptr: *mut CreatePDFOpaque, line_ptr: *mut LineCROpaque) {
+    if ptr.is_null() || line_ptr.is_null() {
+        println!("ptr o lbl_ptr is null");
+        return
+    }
+
+   let pdf = unsafe { & (*ptr).inner };
+   let label = unsafe {&(*line_ptr).inner};
 
    pdf.add(&*label);
    

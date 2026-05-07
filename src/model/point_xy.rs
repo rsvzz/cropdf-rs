@@ -6,6 +6,6 @@ pub struct PointXY {
 
 impl PointXY {
     pub fn new(_x: f64, _y: f64) -> Self {
-        PointXY { x: _x, y: _y }
+        PointXY { x: _x, y: _y}
     }
 }
