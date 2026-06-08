@@ -37,9 +37,10 @@ impl ParamArgsExt for LineCr {
 }
 
 impl DrawCrExt for LineCr {
-    fn draw(&self, context: std::cell::RefCell<Option<Context>>) {
-        if let Some(cr) = context.borrow().as_ref() {
-            if let Some(point) = &self.setting {
+
+    fn draw(&self, context: Option<&Context>) {
+        if let Some(cr) = context {
+            if let Some(point) = &self.setting{
                 cr.set_source_rgb(0.0, 0.0, 0.0); // negro
                 cr.set_line_width(self.thickness);
 
@@ -57,5 +58,18 @@ impl DrawCrExt for LineCr {
                 let _ = cr.stroke();
             }
         }
+    }
+
+    fn get_width(&self) -> f64 {
+        self.width
+    }
+
+    fn get_height(&self) -> f64 {
+        self.height
+    }
+
+    fn get_point(&self) -> Option<PointXY> {
+        self.setting.clone()
+
     }
 }

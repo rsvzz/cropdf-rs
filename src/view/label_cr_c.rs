@@ -51,7 +51,7 @@ pub extern "C" fn label_cr_set_param_args(
             FontWeightCr::Bold => FontWeight::Bold,
         };
 
-        let args = ParamArgs::new(font_family, size, font_slant, font_weight, point);
+        let args = ParamArgs::new(font_family, size, font_slant, font_weight, Some(point));
         label.set_point(Some(args));
     }
 }

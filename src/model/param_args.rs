@@ -8,7 +8,7 @@ pub struct ParamArgs {
     pub font_size: f64,
     pub font_weight: FontWeight,
     pub font_type: FontSlant,
-    pub point: PointXY,
+    pub point: Option<PointXY>,
 }
 
 impl ParamArgs {
@@ -17,7 +17,7 @@ impl ParamArgs {
         size: f64,
         font_slap: FontSlant,
         weight: FontWeight,
-        point: PointXY,
+        point: Option<PointXY>,
     ) -> Self {
         ParamArgs {
             font_family: font_family,
@@ -36,7 +36,7 @@ impl ParamArgs {
             font_size: 0.0,
             font_weight: FontWeight::Normal,
             font_type: FontSlant::Normal,
-            point: point,
+            point: Some(point),
         }
     }
 }

@@ -1,4 +1,5 @@
-use crate::{view::CreatePDF, view::LabelCROpaque, view::LineCROpaque};
+use crate::model::ContentPageExt;
+use crate::view::{CreatePDF, LabelCROpaque, LineCROpaque};
 use std::{ffi::CString, os::raw::c_char};
 
 /// Tipo opaco para C
@@ -49,60 +50,55 @@ pub extern "C" fn create_pdf_get_path(ptr: *mut CreatePDFOpaque) -> *const c_cha
 #[unsafe(no_mangle)]
 pub extern "C" fn create_pdf_surface(ptr: *mut CreatePDFOpaque) {
     if ptr.is_null() {
-        return
+        return;
     }
 
-   let pdf = unsafe { &mut (*ptr).inner };
-   pdf.create_surface();
-
+    let pdf = unsafe { &mut (*ptr).inner };
+    pdf.create_surface();
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn create_pdf_new_page(ptr: *mut CreatePDFOpaque) {
     if ptr.is_null() {
-        return
+        return;
     }
 
-   let pdf = unsafe { & (*ptr).inner };
-   pdf.new_page();
-   
+    let pdf = unsafe { &(*ptr).inner };
+    pdf.new_page();
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn create_pdf_drop(ptr: *mut CreatePDFOpaque) {
     if ptr.is_null() {
-        return
+        return;
     }
 
-   let pdf = unsafe { & (*ptr).inner };
-   pdf.drop();
-   
+    let pdf = unsafe { &mut (*ptr).inner };
+    pdf.drop();
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn create_pdf_add(ptr: *mut CreatePDFOpaque, label_ptr: *mut LabelCROpaque) {
     if ptr.is_null() || label_ptr.is_null() {
         println!("ptr o lbl_ptr is null");
-        return
+        return;
     }
 
-   let pdf = unsafe { & (*ptr).inner };
-   let label = unsafe {&(*label_ptr).inner};
+    let pdf = unsafe { &(*ptr).inner };
+    let label = unsafe { &(*label_ptr).inner };
 
-   pdf.add(&*label);
-   
+    pdf.add(&*label);
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn create_pdf_add_line(ptr: *mut CreatePDFOpaque, line_ptr: *mut LineCROpaque) {
     if ptr.is_null() || line_ptr.is_null() {
         println!("ptr o lbl_ptr is null");
-        return
+        return;
     }
 
-   let pdf = unsafe { & (*ptr).inner };
-   let label = unsafe {&(*line_ptr).inner};
+    let pdf = unsafe { &(*ptr).inner };
+    let label = unsafe { &(*line_ptr).inner };
 
-   pdf.add(&*label);
-   
+    pdf.add(&*label);
 }

@@ -1,0 +1,42 @@
+HOW TO USE THIS LIBRARY
+
+1- Create new objet CreatePDF
+2- Use LabelCR or LineCR for create Text or Line 
+
+let mut _pdf = CreatePDF::new("report.pdf".to_string(), 595.0, 842.0);
+_pdf.create_surface();
+
+
+    //use label type font and point draw
+    let param_t = ParamArgs::new(
+        "Sans".to_string(),
+        20.0,
+        FontSlant::Normal,
+        FontWeight::Bold,
+        Some(PointXY::new(50.0, 50.0)),
+    );
+
+    let mut title = LabelCr::new("REPORT TITLE".to_string(), 550.0, 30.0);
+
+    title.set_point(Some(param_t));
+
+    let mut line = LineCr::new(500.0, 10.0, 2.0, AxisCr::Horizontal);
+    let point = PointXY::new(50.0, 50.0);
+    line.set_point(Some(point));
+
+    let header = HeaderPG::new(_pdf.get_context().cloned(), 595.0, 80.0, true);
+    
+    let mut _lineV = LineCr::new(10.0, 300.0, 1.0, AxisCr::Vertical);
+
+    _lineV.set_point(Some(PointXY::new(60.0, 60.0)));
+
+    let mut body =  BodyPG::new(_pdf.get_context().clone(), 595.0, 400.0);
+    
+    header.add(&line); //line for header
+
+    body.set_header_pg(&header); // optional 
+    body.add(&_lineV);
+
+    _pdf.new_page();  //new page
+    header.draw_repeat(); //repeat header
+    _pdf.drop(); //delete surface pdf

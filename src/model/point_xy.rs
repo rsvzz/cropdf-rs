@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct PointXY {
    pub x: f64,
    pub y: f64,
