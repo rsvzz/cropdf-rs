@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-cairo = {package = "cairo-rs", version = "0.22.0", features = ["pdf"]}
+cairo = {package = "cairo-rs", version = "0.21.5", features = ["pdf"]}
 
 [lib]
 crate-type = ["rlib", "cdylib"]
