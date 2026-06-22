@@ -34,6 +34,32 @@ pub trait DrawCrExt : DrawCrExtClone {
     fn get_point(&self) -> Option<PointXY>;
 }
 
+
+pub trait DrawCrParamClone<T> {
+    fn clone_box(&self) -> Box<dyn DrawCrParam<T>>;
+}
+
+impl<T, U> DrawCrParamClone<T> for U
+where
+    U: 'static + DrawCrParam<T> + Clone,
+{
+    
+    fn clone_box(&self) -> Box<dyn DrawCrParam<T>>{
+        Box::new(self.clone())
+    }
+}
+
+pub trait DrawCrParam<T> : DrawCrParamClone<T>{
+    fn set_param(&mut self, param: T);
+}
+
+/// join Clone
+impl<T> Clone for Box<dyn DrawCrParamClone<T>> {
+    fn clone(&self) -> Self {
+        self.clone_box()
+    }
+}
+
 impl Clone for Box<dyn DrawCrExt> {
     fn clone(&self) -> Box<dyn DrawCrExt>  {
         self.clone_box()

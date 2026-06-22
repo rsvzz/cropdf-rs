@@ -22,6 +22,18 @@ impl LabelCr {
     pub fn set_text(&mut self, ntext: String) {
         self.text = ntext.to_string();
     }
+
+    pub fn set_width(&mut self, w: f64){
+        self.width = w;
+    }
+
+    pub fn set_height(&mut self, h: f64){
+        self.height = h;
+    }
+
+    pub fn get_text(&self) -> String{
+        self.text.to_string()
+    }
 }
 
 impl ParamArgsExt for LabelCr {
@@ -56,7 +68,7 @@ impl DrawCrExt for LabelCr {
                     }
                 }
                 //[x, y]
-                if let Some(point) =  param.point{
+                if let Some(point) =  param.point.borrow().as_ref(){
                     cr.move_to(point.x, point.y);
                 }
                 
@@ -76,7 +88,7 @@ impl DrawCrExt for LabelCr {
 
     fn get_point(&self) -> Option<PointXY> {
         if let Some(param ) = self.setting.clone(){
-            param.point.clone()
+            param.point.borrow().as_ref().cloned()
         }
         else{
             None

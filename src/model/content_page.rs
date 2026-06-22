@@ -114,11 +114,11 @@ impl DrawMaxPG for BodyPG {
 }
 
 impl FooterPG {
-    pub fn new(ctx: &Option<Context>, w: f64, h: f64) -> Self {
+    pub fn new(ctx: Option<&Context>, w: f64, h: f64) -> Self {
         FooterPG {
             width: w,
             height: h,
-            context: ctx.clone(),
+            context: ctx.cloned(),
         }
     }
 }
