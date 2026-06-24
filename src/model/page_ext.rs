@@ -32,6 +32,8 @@ pub trait DrawCrExt : DrawCrExtClone {
     fn get_width(&self) -> f64;
     fn get_height(&self) -> f64;
     fn get_point(&self) -> Option<PointXY>;
+    fn set_wight_and_height(&mut self, width: f64, height: f64);
+    fn set_xy(&mut self, x: f64, y: f64);
 }
 
 
@@ -83,5 +85,9 @@ pub trait ParamArgsExt {
 
     fn set_point(&mut self, _setting: Self::InSetting);
     fn point(&self) -> Self::Output;
+}
+
+pub trait PointExt {
+    fn set_point_xy(&mut self, x: f64, y: f64);
 }
 

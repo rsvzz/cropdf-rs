@@ -3,12 +3,13 @@ use cairo::Context;
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub struct TableCR<T> {
+///T is Items 
+pub struct TableCR {
     limit: LimitWHXY,
-    items: RefCell<Option<Vec<ColumnCR<T>>>>,
+    items: RefCell<Option<Vec<ColumnCR>>>,
 }
 
-impl<T> TableCR<T> {
+impl TableCR {
     pub fn new(_limit: &LimitWHXY) -> Self {
         TableCR {
             limit: *_limit,
@@ -20,7 +21,7 @@ impl<T> TableCR<T> {
         self.limit
     }
 
-    pub fn add(&self, col: Option<&ColumnCR<T>>) {
+    pub fn add(&self, col: Option<&ColumnCR>) {
         if let Some(list) = self.items.borrow_mut().as_mut() {
             if let Some(column) = col.cloned() {
                 list.push(column);
@@ -31,13 +32,19 @@ impl<T> TableCR<T> {
     /// draw all Column
     pub fn show(&self, ctx: Option<&Context>) {
         if let Some(list) = self.items.borrow().as_ref() {
+            let mut x: f64;
+            let mut y: f64;
             for col in list {
-                if let Some(param) = col.get_param_arg() {
-                    if let Some(items) = col.get_list_items() {
-                        for item in items {
-                            //if let Some(lbl) = 
-                            //item.draw(ctx);
-                        }
+                let pt = col.get_limit();
+                x = pt.get_x();
+                y = pt.get_y();
+
+                if let Some(items) = col.get_list_items().as_mut() {
+                    for item in items {
+                        let limit = col.get_limit();
+                        item.set_wight_and_height(limit.get_width(), limit.get_height());
+                        item.set_xy(x, y);
+                        item.draw(ctx);
                     }
                 }
             }

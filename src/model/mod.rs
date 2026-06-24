@@ -13,7 +13,7 @@ pub use cairo::{FontSlant, FontWeight};
 pub use label_cr::LabelCr;
 pub use line_cr::LineCr;
 pub use page_ext::{
-    BodyExt, ContentPageExt, DrawCrExt, DrawMaxPG, FooterExt, HeaderExt, ParamArgsExt, DrawCrParam, DrawCrParamClone,
+    BodyExt, ContentPageExt, DrawCrExt, DrawMaxPG, FooterExt, HeaderExt, ParamArgsExt, DrawCrParam, DrawCrParamClone, PointExt,
 };
 pub use param_args::ParamArgs;
 pub use point_xy::PointXY;

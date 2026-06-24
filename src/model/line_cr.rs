@@ -37,10 +37,9 @@ impl ParamArgsExt for LineCr {
 }
 
 impl DrawCrExt for LineCr {
-
     fn draw(&self, context: Option<&Context>) {
         if let Some(cr) = context {
-            if let Some(point) = &self.setting{
+            if let Some(point) = &self.setting {
                 cr.set_source_rgb(0.0, 0.0, 0.0); // negro
                 cr.set_line_width(self.thickness);
 
@@ -70,6 +69,17 @@ impl DrawCrExt for LineCr {
 
     fn get_point(&self) -> Option<PointXY> {
         self.setting.clone()
+    }
 
+    fn set_wight_and_height(&mut self, width: f64, height: f64) {
+        self.width = width;
+        self.height = height;
+    }
+
+    fn set_xy(&mut self, x: f64, y: f64) {
+        if let Some(param) = self.setting.as_mut() {
+            *param = PointXY::new(x, y);
+            //self.set_point(Some(param));
+        }
     }
 }

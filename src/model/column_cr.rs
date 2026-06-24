@@ -1,14 +1,14 @@
-use crate::model::{DrawCrExt, DrawCrParam, LabelCr, LimitWHXY, ParamArgs, ParamArgsExt, PointXY};
+use crate::model::{DrawCrExt, DrawCrParam, LabelCr, LimitWHXY, ParamArgs, ParamArgsExt, PointExt, PointXY};
 use std::cell::RefCell;
 
+#[derive(Clone)]
 ///ColumnCR list LabelCR
-pub struct ColumnCR<T> {
+pub struct ColumnCR {
     title: String,
     limit: LimitWHXY,
-    items: RefCell<Option<Vec<Box<dyn DrawCrParam<T>>>>>,
-    param: Option<ParamArgs>,
+    items: RefCell<Option<Vec<Box<dyn DrawCrExt>>>>,
 }
-
+/*
 impl<T> Clone for ColumnCR<T> {
     fn clone(&self) -> Self {
         let items_guard = self.items.borrow();
@@ -23,18 +23,17 @@ impl<T> Clone for ColumnCR<T> {
             title: self.title.clone(),
             limit: self.limit.clone(),
             items: RefCell::new(cloned_items),
-            param: self.param.clone(),
         }
     }
 }
+*/
 
-impl<T> ColumnCR<T> {
-    pub fn new(_title: String, _limit: &LimitWHXY, _param: Option<&ParamArgs>) -> Self {
+impl ColumnCR {
+    pub fn new(_title: String, _limit: &LimitWHXY) -> Self {
         ColumnCR {
             title: _title,
             limit: *_limit,
             items: None.into(),
-            param: _param.cloned(),
         }
     }
 
@@ -47,7 +46,7 @@ impl<T> ColumnCR<T> {
     }
 
     /// add items to column
-    pub fn add(&self, obj: &dyn DrawCrParam<T>) {
+    pub fn add(&self, obj: &dyn DrawCrExt) {
         if let Some(list) = self.items.borrow_mut().as_mut() {
             list.push(obj.clone_box());
         } else {
@@ -55,18 +54,17 @@ impl<T> ColumnCR<T> {
         }
     }
 
-    pub fn get_param_arg(&self) -> Option<&ParamArgs> {
-        self.param.as_ref()
-    }
-
     /// items list clone
-    pub fn get_list_items(&self) -> Option<Vec<Box<dyn DrawCrParam<T>>>> {
+    pub fn get_list_items(&self) -> Option<Vec<Box<dyn DrawCrExt>>> {
+        self.items.borrow_mut().as_mut().cloned()
+        /*
         let list = self.items.borrow();
         list.as_ref().map(|vec| {
             vec.iter()
                 .map(|item| item.clone_box()) // Invoca nuestro método manual de clonación de cajas
                 .collect::<Vec<Box<dyn DrawCrParam<T>>>>() // Reconstruye el nuevo Vector
         })
+        */
     }
 }
 
@@ -77,14 +75,11 @@ pub struct ColumnTextCR {
 }
 
 impl ColumnTextCR {
-    pub fn new(text: String) -> Self {
-        let _lbl = LabelCr::new(text, 0.0, 0.0);
+    pub fn new(text: String, limit: &LimitWHXY) -> Self {
+        let mut _lbl = LabelCr::new(text, 0.0, 0.0);
+        _lbl.set_width(limit.get_width());
+        _lbl.set_height(limit.get_height());
         ColumnTextCR { lbl: _lbl }
-    }
-
-    pub fn set_limit(&mut self, limit: &LimitWHXY) {
-        self.lbl.set_width(limit.get_width());
-        self.lbl.set_height(limit.get_height());
     }
 
     pub fn get_text(&self) -> String {
@@ -107,6 +102,15 @@ impl DrawCrExt for ColumnTextCR {
 
     fn get_point(&self) -> Option<PointXY> {
         self.lbl.get_point()
+    }
+    
+    fn set_wight_and_height(&mut self, width: f64, height: f64) {
+        self.lbl.set_width(width);
+        self.lbl.set_height(height);
+    }
+    
+    fn set_xy(&mut self, x: f64, y: f64) {
+        self.lbl.set_point_xy(x, y);
     }
 }
 

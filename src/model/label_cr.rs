@@ -1,4 +1,4 @@
-use crate::model::{DrawCrExt, ParamArgs, ParamArgsExt, PointXY};
+use crate::model::{DrawCrExt, ParamArgs, ParamArgsExt, PointXY, page_ext::PointExt};
 use cairo::Context;
 
 #[derive(Clone)]
@@ -23,15 +23,15 @@ impl LabelCr {
         self.text = ntext.to_string();
     }
 
-    pub fn set_width(&mut self, w: f64){
+    pub fn set_width(&mut self, w: f64) {
         self.width = w;
     }
 
-    pub fn set_height(&mut self, h: f64){
+    pub fn set_height(&mut self, h: f64) {
         self.height = h;
     }
 
-    pub fn get_text(&self) -> String{
+    pub fn get_text(&self) -> String {
         self.text.to_string()
     }
 }
@@ -49,8 +49,17 @@ impl ParamArgsExt for LabelCr {
     }
 }
 
-impl DrawCrExt for LabelCr {
+impl PointExt for LabelCr {
+    fn set_point_xy(&mut self, x: f64, y: f64) {
+        let sett = self.setting.as_mut();
+        if let Some(param) = sett {
+            *param.point.borrow_mut() = Some(PointXY::new(x, y));
+            //self.set_point(Some(param));
+        }
+    }
+}
 
+impl DrawCrExt for LabelCr {
     fn draw(&self, context: Option<&Context>) {
         if let Some(cr) = context {
             if let Some(param) = &self.setting {
@@ -68,10 +77,10 @@ impl DrawCrExt for LabelCr {
                     }
                 }
                 //[x, y]
-                if let Some(point) =  param.point.borrow().as_ref(){
+                if let Some(point) = param.point.borrow().as_ref() {
                     cr.move_to(point.x, point.y);
                 }
-                
+
                 //show text
                 let _ = cr.show_text(&self.text);
             }
@@ -87,11 +96,23 @@ impl DrawCrExt for LabelCr {
     }
 
     fn get_point(&self) -> Option<PointXY> {
-        if let Some(param ) = self.setting.clone(){
+        if let Some(param) = self.setting.clone() {
             param.point.borrow().as_ref().cloned()
-        }
-        else{
+        } else {
             None
+        }
+    }
+
+    fn set_wight_and_height(&mut self, width: f64, height: f64) {
+        self.width = width;
+        self.height = height;
+    }
+
+    fn set_xy(&mut self, x: f64, y: f64) {
+        let sett = self.setting.as_mut();
+        if let Some(param) = sett {
+            *param.point.borrow_mut() = Some(PointXY::new(x, y));
+            //self.set_point(Some(param));
         }
     }
 }
