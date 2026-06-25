@@ -1,9 +1,9 @@
-use crate::model::{ColumnCR, LimitWHXY};
+use crate::model::{ColumnCR, LimitWHXY, PointIncXY};
 use cairo::Context;
 use std::cell::RefCell;
 
 #[derive(Clone)]
-///T is Items 
+///T is Items
 pub struct TableCR {
     limit: LimitWHXY,
     items: RefCell<Option<Vec<ColumnCR>>>,
@@ -32,18 +32,19 @@ impl TableCR {
     /// draw all Column
     pub fn show(&self, ctx: Option<&Context>) {
         if let Some(list) = self.items.borrow().as_ref() {
-            let mut x: f64;
-            let mut y: f64;
+
             for col in list {
                 let pt = col.get_limit();
-                x = pt.get_x();
-                y = pt.get_y();
+
 
                 if let Some(items) = col.get_list_items().as_mut() {
+                    let mut point = PointIncXY::new(&pt, col.get_down_y());
+                    
                     for item in items {
-                        let limit = col.get_limit();
-                        item.set_wight_and_height(limit.get_width(), limit.get_height());
-                        item.set_xy(x, y);
+                        
+                        item.set_wight_and_height(pt.get_width(), pt.get_height());
+                        point.set_limit_point_y(); // move down
+                        item.set_xy(point.get_x(), point.get_y());
                         item.draw(ctx);
                     }
                 }

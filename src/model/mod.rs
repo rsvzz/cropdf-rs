@@ -8,6 +8,7 @@ mod param_args;
 mod point_xy;
 mod table_cr;
 mod type_font;
+mod point_inc_xy;
 
 pub use cairo::{FontSlant, FontWeight};
 pub use label_cr::LabelCr;
@@ -23,4 +24,5 @@ pub use content_page::{BodyPG, FooterPG, HeaderPG};
 
 pub use column_cr::{ColumnCR, ColumnTextCR};
 pub use limit_whxy::LimitWHXY;
-pub use table_cr::TableCR;
+pub use table_cr::{TableCR};
+pub use point_inc_xy::{PointIncXY};

@@ -7,6 +7,7 @@ pub struct ColumnCR {
     title: String,
     limit: LimitWHXY,
     items: RefCell<Option<Vec<Box<dyn DrawCrExt>>>>,
+    down: f64,
 }
 /*
 impl<T> Clone for ColumnCR<T> {
@@ -29,11 +30,12 @@ impl<T> Clone for ColumnCR<T> {
 */
 
 impl ColumnCR {
-    pub fn new(_title: String, _limit: &LimitWHXY) -> Self {
+    pub fn new(_title: String, _limit: &LimitWHXY, _down: f64) -> Self {
         ColumnCR {
             title: _title,
             limit: *_limit,
             items: None.into(),
+            down: _down,
         }
     }
 
@@ -43,6 +45,11 @@ impl ColumnCR {
 
     pub fn get_title(&self) -> String {
         self.title.to_string()
+    }
+
+    ///move (x, y) only Y
+    pub fn get_down_y(&self) -> f64{
+        self.down
     }
 
     /// add items to column
