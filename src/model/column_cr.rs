@@ -94,6 +94,12 @@ impl ColumnTextCR {
     }
 }
 
+impl DrawCrParam<Option<&ParamArgs>> for ColumnTextCR {
+    fn set_param(&mut self, param: Option<&ParamArgs>) {
+        self.lbl.set_point(param.cloned());
+    }
+}
+
 impl DrawCrExt for ColumnTextCR {
     fn draw(&self, context: Option<&cairo::Context>) {
         self.lbl.draw(context);
@@ -118,11 +124,5 @@ impl DrawCrExt for ColumnTextCR {
     
     fn set_xy(&mut self, x: f64, y: f64) {
         self.lbl.set_point_xy(x, y);
-    }
-}
-
-impl DrawCrParam<Option<ParamArgs>> for ColumnTextCR {
-    fn set_param(&mut self, param: Option<ParamArgs>) {
-        self.lbl.set_point(param);
     }
 }
