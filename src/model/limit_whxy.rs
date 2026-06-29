@@ -49,5 +49,14 @@ impl LimitWHXY {
         self.y
     }
 
+    pub fn set_limit(&mut self, limit: Option<&LimitWHXY>){
+        if let Some(lim) = limit{
+            self.set_width(lim.get_width());
+            self.set_height(lim.get_height());
+            self.set_x(lim.get_x());
+            self.set_y(lim.get_y());
+        }
+    }
+
 
 }

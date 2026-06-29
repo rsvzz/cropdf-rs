@@ -1,6 +1,6 @@
-use crate::model::{ColumnCR, LimitWHXY, PointIncXY, PointXY, line_cr};
-use cairo::{Context, ffi::LINE_JOIN_BEVEL};
-use std::cell::RefCell;
+use crate::model::{AxisCr, ColumnCR, DrawCrExt, LimitWHXY, LineCr, ParamArgsExt, PointIncXY, PointXY};
+use cairo::{Context};
+use std::{cell::RefCell};
 
 #[derive(Clone)]
 ///T is Items
@@ -36,7 +36,6 @@ impl TableCR {
         // get columns added for table
         if let Some(list) = self.items.borrow().as_ref() {
             //run columns
-            
 
             //  | 1  | 2  | 3  |
             //  ----------------  ^ | ^
@@ -57,7 +56,7 @@ impl TableCR {
 
                 if let Some(items) = col.get_list_items().as_mut() {
                     let mut point_inc = PointIncXY::new(&pt, col.get_down_y());
-                    let mut position: u32 = 0; //read positon items for column
+                    //let mut position: u32 = 0; //read positon items for column
                     //run item column
                     for item in items {
                         //items empty or full
@@ -65,12 +64,10 @@ impl TableCR {
                         point_inc.set_limit_point_y(); // move down
                         item.set_xy(point_inc.get_x(), point_inc.get_y());
                         item.draw(ctx);
-                        
-                     
-                            line_t.set_width_inc(col.get_limit().get_width());
-                            //line_t.add_column(&ItemPosition::new(p_col, position, point_inc.get_point_conv()));
-                        item_c +=1;
-            
+
+                        line_t.set_width_inc(col.get_limit().get_width());
+                        //line_t.add_column(&ItemPosition::new(p_col, position, point_inc.get_point_conv()));
+                        item_c += 1;
                     }
                     item_ps.set_position(item_c);
                     list_vec.push(line_t);
@@ -79,15 +76,56 @@ impl TableCR {
                 //p_col += 1; //position column
             }
 
-            for i in 0..item_ps.get_items()  {
-                for c in 0..item_ps.get_columns(){
-                    if let Some( column) = list.get(c as usize){
-                        println!("col: {} items: {}", column.get_limit().get_width(), i);
+            let mut col_status = false;
+            
+            let mut point_inc: Option<PointIncXY> = None;
+
+            for i in 0..item_ps.get_items() {
+                
+                if !col_status {
+                     let mut col_limit = LimitWHXY::new(0.0, 0.0, 0.0, 0.0);
+                     
+                    for c in 0..item_ps.get_columns() {
+                        if let Some(column) = list.get(c as usize) {
+                            let limit_cols = column.get_limit();
+                            // sum width 
+                            col_limit.set_width(limit_cols.get_width() + col_limit.get_width());
+                            col_limit.set_height(limit_cols.get_height() + col_limit.get_height());
+                            
+                            if c == 0{
+                                point_inc = Some(PointIncXY::new(&limit_cols, column.get_down_y()));
+
+                                col_limit.set_x(col_limit.get_x());
+                                col_limit.set_y(col_limit.get_y());
+                            }
+                            
+                           
+                        }
                     }
-                    
+                    let limit = LimitWHXY::new(col_limit.get_width(), col_limit.get_height(), col_limit.get_x(), col_limit.get_y());
+                    item_ps.set_limit_all(Some(&limit));
+                     println!("col: {} items: {}", limit.get_width(), i);
                 }
+                
+                if let Some(limit) = item_ps.get_limit(){
+                    let mut line = LineCr::new( limit.get_width(), 5.0, 1.0, AxisCr::Horizontal);
+
+                    if let Some(point) = point_inc.as_mut(){
+                        point.set_limit_point_y();
+
+                          line.set_point(Some(PointXY::new(point.get_x(), point.get_y() + 5.0)));
+                    } 
+                  
+                    line.draw(ctx);
+                }
+                
+                col_status = true;
             }
-            println!("items {}, cols {}", item_ps.get_items(), item_ps.get_columns());
+            println!(
+                "items {}, cols {}",
+                item_ps.get_items(),
+                item_ps.get_columns()
+            );
         }
     }
 }
@@ -106,6 +144,7 @@ impl TableCR {
 struct ItemPosition {
     position: u32,
     col: u32,
+    limit: Option<LimitWHXY>,
 }
 
 impl ItemPosition {
@@ -113,27 +152,35 @@ impl ItemPosition {
         ItemPosition {
             position: 0,
             col: 0,
+            limit: None
         }
     }
 
-    fn set_position(&mut self, num: u32){
-        if num  > self.position{
+    fn set_limit_all(&mut self, _limit: Option<&LimitWHXY>){
+        self.limit = _limit.cloned();
+    }
+
+    fn get_limit(&self) -> Option<LimitWHXY>{
+        self.limit
+    }
+
+    fn set_position(&mut self, num: u32) {
+        if num > self.position {
             self.position = num;
         }
     }
 
-    fn set_column(&mut self){
+    fn set_column(&mut self) {
         self.col += 1;
     }
 
-    fn get_items(&self) -> u32{
+    fn get_items(&self) -> u32 {
         self.position
     }
 
-    fn get_columns(&self) -> u32{
+    fn get_columns(&self) -> u32 {
         self.col
     }
-
 }
 
 #[derive(Clone)]
