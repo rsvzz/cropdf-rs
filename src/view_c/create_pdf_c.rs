@@ -1,5 +1,6 @@
 use crate::model::ContentPageExt;
-use crate::view::{CreatePDF, LabelCROpaque, LineCROpaque};
+use crate::view::{CreatePDF,};
+use crate::view_c::{LabelCROpaque, LineCROpaque};
 use std::{ffi::CString, os::raw::c_char};
 
 /// Tipo opaco para C
