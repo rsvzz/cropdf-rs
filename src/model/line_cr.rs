@@ -21,17 +21,19 @@ impl LineCr {
             setting: None,
         }
     }
+
+    pub fn set_axis(&mut self, _axis: AxisCr){
+        self.axis = _axis
+    }
 }
 
-impl ParamArgsExt for LineCr {
-    type Output = Option<PointXY>;
-    type InSetting = Option<PointXY>;
+impl ParamArgsExt<Option<PointXY>> for LineCr {
 
-    fn set_point(&mut self, _setting: Self::InSetting) {
+    fn set_point(&mut self, _setting: Option<PointXY>) {
         self.setting = _setting;
     }
 
-    fn point(&self) -> Self::Output {
+    fn point(&self) -> Option<PointXY> {
         self.setting.clone()
     }
 }

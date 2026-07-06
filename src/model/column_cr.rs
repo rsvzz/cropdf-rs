@@ -2,13 +2,15 @@ use crate::model::{DrawCrExt, DrawCrParam, LabelCr, LimitWHXY, ParamArgs, ParamA
 use std::cell::RefCell;
 
 #[derive(Clone)]
-///ColumnCR list LabelCR
+///ColumnCR list LabelCR and others
 pub struct ColumnCR {
     title: String,
+    ///use width and height
     limit: LimitWHXY,
     items: RefCell<Option<Vec<Box<dyn DrawCrExt>>>>,
-    down: f64,
+    //down: f64,
 }
+
 /*
 impl<T> Clone for ColumnCR<T> {
     fn clone(&self) -> Self {
@@ -30,12 +32,15 @@ impl<T> Clone for ColumnCR<T> {
 */
 
 impl ColumnCR {
-    pub fn new(_title: String, _limit: &LimitWHXY, _down: f64) -> Self {
+    /// new Object ColumnCR
+    /// * `title` - title column show for header 
+    /// * `limit` - param for use width and height
+    pub fn new(title: String, limit: &LimitWHXY) -> Self {
         ColumnCR {
-            title: _title,
-            limit: *_limit,
+            title: title,
+            limit: *limit,
             items: None.into(),
-            down: _down,
+            //down: _down,
         }
     }
 
@@ -48,9 +53,9 @@ impl ColumnCR {
     }
 
     ///move (x, y) only Y
-    pub fn get_down_y(&self) -> f64{
-        self.down
-    }
+    //pub fn get_down_y(&self) -> f64{
+    //    self.down
+    //}
 
     /// add items to column
     pub fn add(&self, obj: &dyn DrawCrExt) {
@@ -82,6 +87,8 @@ pub struct ColumnTextCR {
 }
 
 impl ColumnTextCR {
+    /// new object text name column and limit width and height needed
+    ///text
     pub fn new(text: String, limit: &LimitWHXY) -> Self {
         let mut _lbl = LabelCr::new(text, 0.0, 0.0);
         _lbl.set_width(limit.get_width());

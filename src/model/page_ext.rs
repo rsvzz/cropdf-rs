@@ -26,7 +26,6 @@ where
     }
 }
 
-
 pub trait DrawCrExt : DrawCrExtClone {
     fn draw(&self, context: Option<&Context>);
     fn get_width(&self) -> f64;
@@ -79,12 +78,11 @@ pub trait DrawMaxPG {
     fn get_width(&self) -> f64;
 }
 
-pub trait ParamArgsExt {
-    type Output;
-    type InSetting;
-
-    fn set_point(&mut self, _setting: Self::InSetting);
-    fn point(&self) -> Self::Output;
+///Point (x, y) for Draw Control
+/// * `T` type Data for input and out
+pub trait ParamArgsExt<T> {
+    fn set_point(&mut self, _setting: T);
+    fn point(&self) -> T;
 }
 
 pub trait PointExt {

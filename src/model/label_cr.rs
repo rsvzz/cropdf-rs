@@ -36,15 +36,13 @@ impl LabelCr {
     }
 }
 
-impl ParamArgsExt for LabelCr {
-    type Output = Option<ParamArgs>;
-    type InSetting = Option<ParamArgs>;
+impl ParamArgsExt<Option<ParamArgs>> for LabelCr {
 
-    fn set_point(&mut self, _setting: Self::InSetting) {
+    fn set_point(&mut self, _setting: Option<ParamArgs>) {
         self.setting = _setting;
     }
 
-    fn point(&self) -> Self::Output {
+    fn point(&self) -> Option<ParamArgs> {
         self.setting.clone()
     }
 }

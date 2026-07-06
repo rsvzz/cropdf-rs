@@ -23,6 +23,10 @@ impl PointIncXY {
         self.limit.get_y()
     }
 
+    pub fn get_height_max(&self) -> f64{
+        self.limit.get_height()
+    }
+
     pub fn get_point_conv(&self) -> PointXY{
         PointXY::new(self.limit.get_x(), self.limit.get_y())
     }
@@ -36,5 +40,9 @@ impl PointIncXY {
         else{
             self.changed = true;
         }
+    }
+
+    pub fn get_down_y(&self) -> f64{
+        self.down
     }
 }
