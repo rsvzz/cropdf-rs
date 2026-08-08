@@ -1,6 +1,6 @@
 use cairo::{FontSlant, FontWeight};
 
-use crate::model::{FontSlantCr, FontWeightCr, LabelCr, ParamArgs, ParamArgsExt, PointXY};
+use crate::model::{LimitExt, FontSlantCr, FontWeightCr, LabelCr, ParamArgs, ParamArgsExt, PointExt};
 use std::{ffi::CStr, os::raw::c_char};
 
 #[repr(C)]
@@ -13,7 +13,9 @@ pub extern "C" fn label_cr_new(path: *const c_char, width: f64, height: f64) -> 
     let c_str = unsafe { CStr::from_ptr(path) };
     let path_str = c_str.to_str().unwrap().to_string();
 
-    let label = LabelCr::new(path_str, width, height);
+    let mut label = LabelCr::new(path_str);
+    label.set_limit_wh(width, height);
+
     let wrapper = LabelCROpaque { inner: label };
     Box::into_raw(Box::new(wrapper))
 }
@@ -36,8 +38,7 @@ pub extern "C" fn label_cr_set_param_args(
             family = CStr::from_ptr(font); //convert const *char de C a rust unsafe for ref.
         }
 
-        let point = PointXY::new(x, y);
-
+        label.set_point_xy(x, y);
         let font_family = family.to_str().unwrap().to_string(); //String rust
 
         let font_slant = match slant {
@@ -51,7 +52,7 @@ pub extern "C" fn label_cr_set_param_args(
             FontWeightCr::Bold => FontWeight::Bold,
         };
 
-        let args = ParamArgs::new(font_family, size, font_slant, font_weight, Some(point));
-        label.set_point(Some(args));
+        let args = ParamArgs::new(font_family, size, font_slant, font_weight);
+        label.set_param_arg(Some(&args));
     }
 }

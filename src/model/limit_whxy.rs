@@ -1,3 +1,5 @@
+use crate::model::PointXY;
+
 ///position obj and width and height max
 #[derive(Clone, Copy)]
 pub struct LimitWHXY {
@@ -16,7 +18,9 @@ impl LimitWHXY {
             y: _y,
         }
     }
-
+    pub fn get_point(&self) -> PointXY{
+        PointXY::new(self.x, self.y)
+    }
     pub fn set_width(&mut self, w: f64){
         self.width = w
     }

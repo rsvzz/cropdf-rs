@@ -1,48 +1,57 @@
-use crate::model::{LimitWHXY, PointXY};
-
+use crate::model::PointXY;
+/// Get point (x, y) for table first
 pub struct PointIncXY {
-    limit: LimitWHXY,
+    /// width column
+    width: f64,
+    /// point (x, y) table
+    point: Option<PointXY>,
+    /// down y next line
     down: f64,
-    changed: bool,
 }
 
 impl PointIncXY {
-    pub fn new(_limit: &LimitWHXY, p_y: f64) -> Self {
+    /// Point increment for items columns
+    /// * `width` columns
+    /// * `point_t` (x, y) is point table
+    /// * `down_y` (x, y) is y down for next line
+    pub fn new(_width: f64, point_t: Option<&PointXY>, down_y: f64) -> Self {
         PointIncXY {
-            limit: _limit.clone(),
-            down: p_y,
-            changed: false,
+            width: _width,
+            point: point_t.cloned(),
+            down: down_y,
         }
+    }
+
+    pub fn get_width(&self) -> f64 {
+        self.width
     }
 
     pub fn get_x(&self) -> f64 {
-        self.limit.get_x()
+        if let Some(point) = self.point.as_ref() {
+            point.x
+        } else {
+            0.0
+        }
     }
 
     pub fn get_y(&self) -> f64 {
-        self.limit.get_y()
-    }
-
-    pub fn get_height_max(&self) -> f64{
-        self.limit.get_height()
-    }
-
-    pub fn get_point_conv(&self) -> PointXY{
-        PointXY::new(self.limit.get_x(), self.limit.get_y())
-    }
-    ////move (x, y) new position for next line
-    pub fn set_limit_point_y(&mut self) {
-        if self.changed {
-            let mut y = self.limit.get_y();
-            y += self.down; //down y
-            self.limit.set_y(y); //set 
-        }
-        else{
-            self.changed = true;
+        if let Some(point) = self.point.as_ref() {
+            point.y
+        } else {
+            0.0
         }
     }
 
-    pub fn get_down_y(&self) -> f64{
+    ///move (x, y) new position for next line
+    /// * | -
+    /// * | -
+    pub fn set_point_next_line(&mut self) {
+        if let Some(point) = self.point.as_mut() {
+            point.y += self.down; // next line
+        }
+    }
+
+    pub fn get_down(&self) -> f64 {
         self.down
     }
 }

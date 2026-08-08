@@ -1,7 +1,8 @@
 [package]
 name = "cropdf"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
+rust-version = "1.91.0"
 
 [dependencies]
 cairo = {package = "cairo-rs", version = "0.21.5", features = ["pdf"]}

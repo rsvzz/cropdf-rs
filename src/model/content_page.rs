@@ -94,12 +94,14 @@ impl BodyPG {
 
 impl ContentPageExt for BodyPG {
     fn add(&self, obj: &dyn DrawCrExt) {
-          if let Some(point) = obj.get_point() {
+          /* 
+          if let Some(point) = obj. {
             //point draw in header width and height max
             if self.width >= point.x && self.height >= point.y {
                 obj.draw(self.context.as_ref());
             }
         }
+        */
     }
 }
 
@@ -135,7 +137,7 @@ impl DrawMaxPG for FooterPG {
 
 impl ContentPageExt for HeaderPG {
     fn add(&self, obj: &dyn DrawCrExt) {
-        if let Some(point) = obj.get_point() {
+        /*if let Some(point) = obj.get_point() {
             //point draw in header width and height max
             if self.width >= point.x && self.height >= point.y {
                 obj.draw(self.context.as_ref());
@@ -151,15 +153,17 @@ impl ContentPageExt for HeaderPG {
                 }
             }
             //self >= obj width and height for drawing
-        }
+        }*/
     }
 }
 
 impl ContentPageExt for FooterPG {
     fn add(&self, obj: &dyn DrawCrExt) {
         //self >= obj width and height for drawing
+        /*
         if self.width >= obj.get_width() && self.height >= obj.get_height() {
             obj.draw(self.context.as_ref());
         }
+        */
     }
 }
