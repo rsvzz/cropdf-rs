@@ -2,12 +2,9 @@ use cairo::{Context, FontSlant, FontWeight};
 
 use crate::model::{
     DrawCrExt, DrawCrParam, LabelCr, LimitCR, LimitExt, ParamArgs, ParamArgsExt, PointExt,
-    PointIncXY, PointXY, TableCR,
+    PointIncXY, PointXY,
 };
-use std::{
-    cell::{Ref, RefCell},
-    env::Args,
-};
+use std::cell::RefCell;
 
 #[derive(Clone)]
 /// type column for show in column and table
@@ -77,6 +74,8 @@ pub struct ColumnCR {
     col_id: RefCell<u32>,
     /// param text show.
     param: RefCell<Option<ColumnParamCR>>,
+    /// Is column group
+    is_grouping: RefCell<bool>,
 }
 
 impl ColumnCR {
@@ -87,13 +86,22 @@ impl ColumnCR {
         ColumnCR {
             title: title,                                    // need title for show title column
             limit: RefCell::new(Some(LimitCR::new(w, 5.0))), //default 5.0 pt
-            point: RefCell::new(None),                       //dont need point default
+            point: None.into(),                       //dont need point default
             items: None.into(),                              // dont need items for default
             col_id: RefCell::new(0),
             param: RefCell::new(args.cloned()),
+            is_grouping: RefCell::new(false),
         }
     }
 
+    /// set group true or false
+    pub fn set_grouping(&self, grouping: bool){
+        *self.is_grouping.borrow_mut() = grouping;
+    }
+
+    pub fn get_grouping(&self) -> bool{
+       self.is_grouping.borrow().clone()
+    }
     pub fn get_title(&self) -> String {
         self.title.to_string()
     }

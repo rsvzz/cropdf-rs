@@ -1,4 +1,6 @@
 pub mod model;
+pub mod control;
+
 pub mod view;
 pub mod view_c;
 

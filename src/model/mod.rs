@@ -11,6 +11,9 @@ mod type_font;
 mod point_inc_xy;
 mod lbl_show;
 mod item_position;
+mod group_column;
+mod point; //new
+mod limit_max;
 
 pub use cairo::{FontSlant, FontWeight};
 pub use label_cr::LabelCr;
@@ -31,3 +34,8 @@ pub use point_inc_xy::{PointIncXY};
 
 pub use lbl_show::LblShow;
 pub use item_position::ItemPosition;
+pub use group_column::GroupColumn;
+
+pub use point::{Point, IPointExt}; //new 
+pub use limit_max::{LimitMax, ILimitExt};
+
